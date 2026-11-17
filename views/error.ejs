@@ -1,0 +1,6 @@
+<%- include("partials/header", { title, loggedIn, notice }) %>
+<section class="error-card">
+  <span class="error-mark">!</span><p class="eyebrow">REQUEST COULD NOT BE COMPLETED</p><h1><%= title %></h1><p><%= message %></p>
+  <a class="button button-primary" href="<%= loggedIn ? '/' : '/' %>">Return home</a>
+</section>
+<%- include("partials/footer") %>

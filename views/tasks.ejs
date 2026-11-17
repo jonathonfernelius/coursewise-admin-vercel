@@ -1,0 +1,40 @@
+<%- include("partials/header", { title: "Maintain Tasks", loggedIn, notice }) %>
+<section class="page-heading">
+  <div><p class="eyebrow">ADMIN WORKSPACE / TASKS</p><h1>Maintain Tasks</h1><p class="lead-small">Manage task records shared with the CourseWise app.</p></div>
+  <a class="button button-primary" href="/tasks/new"><span aria-hidden="true">＋</span> Add task</a>
+</section>
+<section class="panel">
+  <div class="panel-heading">
+    <div><h2>Task records</h2><p data-record-count data-record-label="tasks" data-record-singular="task"><%= tasks.length %> task<%= tasks.length === 1 ? "" : "s" %></p></div>
+    <div class="panel-tools"><% if (tasks.length) { %><label class="search-box"><span class="sr-only">Filter tasks</span><span aria-hidden="true">⌕</span><input type="search" data-table-search placeholder="Search tasks" autocomplete="off"></label><% } %><a class="text-link" href="/">← Back home</a></div>
+  </div>
+  <% if (tasks.length) { %>
+    <div class="table-tools" data-table-tools>
+    <div class="table-wrap"><table data-sortable-table>
+      <thead><tr>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="0" aria-label="Sort by task">Task <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="1" aria-label="Sort by owner">Owner <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="2" aria-label="Sort by due date">Due date <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="3" aria-label="Sort by status">Status <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col">Actions</th>
+      </tr></thead>
+      <tbody><% tasks.forEach(task => { const ownerName = names.get(String(task.UserID)) || "Unknown user"; const dueDate = task.TaskDueDate ? String(task.TaskDueDate).slice(0, 10) : ""; const statusText = task.IsComplete ? "Complete" : "In progress"; %>
+        <tr data-filter-row data-search="<%= [task.Name, ownerName, dueDate, statusText].join(' ') %>">
+          <td class="task-name" data-sort-value="<%= task.Name %>"><%= task.Name %></td>
+          <td data-sort-value="<%= ownerName %>"><%= ownerName %></td>
+          <td data-sort-value="<%= dueDate %>"><%= formatDueDate(task.TaskDueDate) %></td>
+          <td data-sort-value="<%= task.IsComplete ? '1' : '0' %>"><span class="status-pill <%= task.IsComplete ? 'status-done' : 'status-open' %>"><i></i><%= statusText %></span></td>
+          <td><div class="row-actions">
+            <a class="button button-small button-outline" href="/tasks/<%= encodeURIComponent(task.TaskID) %>/edit">Edit</a>
+            <form action="/tasks/<%= encodeURIComponent(task.TaskID) %>/delete" method="post" onsubmit="return confirm('Delete this task?');"><button class="button button-small button-danger" type="submit">Delete</button></form>
+          </div></td>
+        </tr>
+      <% }) %></tbody>
+    </table></div>
+    <p class="filter-empty" data-filter-empty hidden>No tasks match your search.</p>
+    </div>
+  <% } else { %>
+    <div class="empty-state"><span class="empty-icon">✓</span><h3>No tasks yet</h3><p>Add a CourseWise task record to get started.</p><a class="button button-primary" href="/tasks/new">Add first task</a></div>
+  <% } %>
+</section>
+<%- include("partials/footer") %>

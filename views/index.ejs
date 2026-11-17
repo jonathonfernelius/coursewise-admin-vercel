@@ -1,0 +1,41 @@
+<%- include("partials/header", { title: "Home", loggedIn, notice }) %>
+<section class="welcome-grid">
+  <div class="welcome-copy">
+    <div class="eyebrow"><span class="eyebrow-dot"></span> COURSEWISE ADMIN</div>
+    <h1>Make room for<br><span>what matters.</span></h1>
+    <p class="lead">A focused workspace for keeping CourseWise users and tasks organized. Sign in with your CourseWise administrator account to manage the records behind the experience.</p>
+    <% if (loggedIn) { %>
+      <div class="welcome-actions">
+        <a class="button button-primary" href="/users">Maintain Users <span aria-hidden="true">→</span></a>
+        <a class="button button-outline" href="/tasks">Maintain Tasks <span aria-hidden="true">→</span></a>
+      </div>
+      <p class="signed-in-note">Signed in as <strong><%= adminEmail %></strong></p>
+    <% } else { %>
+      <form class="login-card" action="/login" method="post">
+        <div class="login-heading">
+          <div><p class="eyebrow">ADMIN ACCESS</p><h2>Welcome back</h2></div>
+          <span class="lock-mark" aria-hidden="true">↗</span>
+        </div>
+        <label for="user_email">Email address</label>
+        <input id="user_email" name="user_email" type="email" autocomplete="username" placeholder="you@example.com" required>
+        <label for="user_password">Password</label>
+        <input id="user_password" name="user_password" type="password" autocomplete="current-password" placeholder="Your password" required>
+        <button class="button button-primary login-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        <p class="login-help">Use an account that has been granted CourseWise admin access.</p>
+      </form>
+    <% } %>
+  </div>
+  <aside class="welcome-art" aria-label="CourseWise planning illustration">
+    <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+    <div class="art-caption"><span class="art-caption-mark">✳</span><div><strong>One calm place</strong><small>for your next step</small></div></div>
+    <img class="art-logo" src="/images/coursewise-logo-green.png" alt="CourseWise logo">
+    <div class="art-card card-top"><span class="mini-icon">✓</span><div><b>Keep it moving</b><small>Small steps add up</small></div></div>
+    <div class="art-card card-bottom"><span class="mini-bars"><i></i><i></i><i></i></span><div><b>Stay on track</b><small>Tasks, with a little more clarity</small></div></div>
+  </aside>
+</section>
+<section class="feature-strip" aria-label="Admin tools">
+  <article><span class="feature-number">01</span><div><h3>People</h3><p>Keep CourseWise profiles and sign-in details current.</p></div></article>
+  <article><span class="feature-number">02</span><div><h3>Tasks</h3><p>Create, review, update, and remove task records.</p></div></article>
+  <article><span class="feature-number">03</span><div><h3>Protected</h3><p>Admin tools appear after a verified administrator sign-in.</p></div></article>
+</section>
+<%- include("partials/footer") %>

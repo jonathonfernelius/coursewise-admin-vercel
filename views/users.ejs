@@ -1,0 +1,40 @@
+<%- include("partials/header", { title: "Maintain Users", loggedIn, notice }) %>
+<section class="page-heading">
+  <div><p class="eyebrow">ADMIN WORKSPACE / USERS</p><h1>Maintain Users</h1><p class="lead-small">Manage CourseWise profiles and the accounts they use to sign in.</p></div>
+  <a class="button button-primary" href="/users/new"><span aria-hidden="true">＋</span> Add user</a>
+</section>
+<section class="panel">
+  <div class="panel-heading">
+    <div><h2>User records</h2><p data-record-count data-record-label="profiles" data-record-singular="profile"><%= users.length %> profile<%= users.length === 1 ? "" : "s" %></p></div>
+    <div class="panel-tools"><% if (users.length) { %><label class="search-box"><span class="sr-only">Filter users</span><span aria-hidden="true">⌕</span><input type="search" data-table-search placeholder="Search users" autocomplete="off"></label><% } %><a class="text-link" href="/">← Back home</a></div>
+  </div>
+  <% if (users.length) { %>
+    <div class="table-tools" data-table-tools>
+    <div class="table-wrap"><table data-sortable-table>
+      <thead><tr>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="0" aria-label="Sort by email">Email <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="1" aria-label="Sort by name">Name <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col" aria-sort="none"><button class="sort-button" type="button" data-sort-column="2" aria-label="Sort by username">Username <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+        <th scope="col">Actions</th>
+      </tr></thead>
+      <tbody><% users.forEach(user => { const fullName = [user.FirstName, user.LastName].filter(Boolean).join(" ") || "—"; %>
+        <tr data-filter-row data-search="<%= [user.email, fullName, user.Username].filter(Boolean).join(' ') %>">
+          <td class="email-cell" data-sort-value="<%= user.email %>"><%= user.email %></td>
+          <td data-sort-value="<%= fullName %>"><%= fullName %></td>
+          <td data-sort-value="<%= user.Username || '' %>"><span class="username-chip"><%= user.Username || "—" %></span></td>
+          <td><div class="row-actions">
+            <a class="button button-small button-outline" href="/users/<%= encodeURIComponent(user.UserID) %>/edit">Edit</a>
+            <form action="/users/<%= encodeURIComponent(user.UserID) %>/delete" method="post" onsubmit="return confirm('Delete this user account? Their CourseWise account will also be removed.');">
+              <button class="button button-small button-danger" type="submit">Delete</button>
+            </form>
+          </div></td>
+        </tr>
+      <% }) %></tbody>
+    </table></div>
+    <p class="filter-empty" data-filter-empty hidden>No users match your search.</p>
+    </div>
+  <% } else { %>
+    <div class="empty-state"><span class="empty-icon">◎</span><h3>No users yet</h3><p>Create a user record to get started.</p><a class="button button-primary" href="/users/new">Add first user</a></div>
+  <% } %>
+</section>
+<%- include("partials/footer") %>
